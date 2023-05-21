@@ -1,0 +1,44 @@
+---
+- hosts: All
+  become: true
+  pre_tasks:
+
+  -  name: Install update(Ubuntu)
+     tags: always
+     apt:
+       upgrade: dist
+       update_cache: yes
+     when: ansible_distribution == "Ubuntu"
+
+  -  name: Install update(CentOS)
+     tags: always
+     dnf:
+       update_only: yes
+       update_cache: yes
+     when: ansible_distribution == "CentOS"
+
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: Install Glance
+    apt:
+      name:
+        - glance
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install keystone
+    apt:
+      name:
+        - keystone
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+  - name: Install nova
+    apt:
+      name:
+        - nova-compute
+      state: latest
+    when: ansible_distribution == "Ubuntu"
